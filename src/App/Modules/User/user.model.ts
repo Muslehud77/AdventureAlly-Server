@@ -13,7 +13,7 @@ const userSchema = new Schema<TUser, TUserStatics>(
     password: { type: String, required: true, select: 0 },
     phone: { type: String, required: true },
     address: { type: String, required: true },
-    status: {type: String,enum : ["in-Progress","blocked"],default:"in-progress"},
+    status: {type: String,enum : ["in-progress","blocked"],default:"in-progress"},
     isDeleted: {type: Boolean,default:false},
   },
   {
@@ -22,8 +22,10 @@ const userSchema = new Schema<TUser, TUserStatics>(
 );
 
 
+
+
 userSchema.statics.isUserExists = async function(id:string){
-    const user = await User.findById({_id:id})
+    const user = await User.findById({ _id: id }).select('+password');
     if(!user){
         throw new AppError(httpStatus.NOT_FOUND,"User does not exist!")
     }
@@ -31,7 +33,7 @@ userSchema.statics.isUserExists = async function(id:string){
 }
 
 userSchema.statics.isUserHasAccess = async function (id: string) {
-  const user = await User.findById({ _id: id });
+  const user = await User.findById({ _id: id }).select("+password");
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
   }
@@ -55,5 +57,10 @@ userSchema.pre('save',async function(){
     this.password = encryptedPassword;
 })
 
+userSchema.post('save',async function(doc,next){
+  this.password = ''
+
+  next()
+});
 
 export const User = model<TUser, TUserStatics>('User', userSchema);

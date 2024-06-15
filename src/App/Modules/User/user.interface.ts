@@ -13,6 +13,7 @@ export interface TUser {
 
 export interface TUserResponse extends TUser {
   _id: string;
+  _doc: TUser
 }
 
 export interface TUserStatics extends Model<TUser> {

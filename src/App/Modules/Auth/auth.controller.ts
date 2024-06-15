@@ -1,27 +1,28 @@
 import configs from '../../configs';
 import catchAsync from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
-import { TUser } from '../User/user.interface';
+import {  TUserResponse } from '../User/user.interface';
 import { authServices } from './auth.service';
+import { TUser } from './../User/user.interface';
 
 const createUser = catchAsync(async (req, res) => {
   const userData = req.body;
 
-  const result = await authServices.createUserIntoDB(userData);
-
+  const result = await authServices.createUserIntoDB(userData) as unknown as TUserResponse ;
+ 
   const data = {
-    success: true,
-    statusCode: 200,
+    success: true, 
+    statusCode: 201,
     message: 'User registered successfully',
     data: result,
   };
-  sendResponse<TUser>(res, data);
+  sendResponse<TUserResponse>(res, data);
 });
 
 const userSignIn = catchAsync(async (req, res) => {
   const userData = req.body;
 
-  const { user, accessToken, refreshToken } =
+  const { rest , accessToken, refreshToken } =
     await authServices.signIn(userData);
 
    res.cookie("refreshToken",refreshToken,{
@@ -34,7 +35,7 @@ const userSignIn = catchAsync(async (req, res) => {
     success: true,
     statusCode: 200,
     message: 'User registered successfully',
-    data: user,
+    data: rest as TUser,
     token: accessToken,
   };
   sendResponse<TUser>(res, data);
@@ -51,8 +52,8 @@ const refreshToken = catchAsync(async (req, res) => {
   const data = {
     success: true,
     statusCode: 200,
-    message: 'User registered successfully',
-    data: result,
+    message: 'Token updated successfully',
+    token : result
   };
   sendResponse(res, data);
 });

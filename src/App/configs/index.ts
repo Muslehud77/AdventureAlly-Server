@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const port = process.env.PORT
-const dbUri  = process.env.DB_URI as string
+const dbUri = process.env.DATABASE_URI as string;
 const saltRounds = Number(process.env.HASH_SALT) as number;
 const defaultPassword = process.env.DEFAULT_PASS as string;
 const node_env = process.env.NODE_ENV as string;

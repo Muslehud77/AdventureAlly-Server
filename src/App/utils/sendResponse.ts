@@ -7,6 +7,7 @@ type TData<T> = {
     statusCode : number;
     message : string;
     data : T
+    token? : string
 }
 
 export const sendResponse = <T>(res: Response, data: TData<T>) => {
@@ -19,10 +20,14 @@ export const sendResponse = <T>(res: Response, data: TData<T>) => {
        data: [],
      });
   }
- 
+  
+  console.log(data);
+
   res.status(data.statusCode).json({
     success: data.success,
+    statusCode: data.statusCode,
     message: data?.message || 'Request Successful',
     data: data.data,
+    ...(data.token && {token : data?.token})
   });
 };

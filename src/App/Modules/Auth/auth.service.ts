@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
+import bcrypt from "bcrypt"
 import { TUser, TUserResponse } from '../User/user.interface';
 import { User } from '../User/user.model';
 import { TUserSignIn } from './auth.interface';
@@ -9,15 +10,26 @@ import { generateToken } from './auth.utils';
 
 const createUserIntoDB = async (userData: TUser) => {
   const result = await User.create(userData);
-  return result;
+  const user = await User.findById({ _id: result._id }).select(
+    '-isDeleted -status -__v',
+  );
+  return user;
 };
 
 const signIn = async (userData: TUserSignIn) => {
   const isUserExist = (await User.findOne({
     email: userData.email,
-  })) as TUserResponse;
+  }).select("+password")) as TUserResponse;
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'User does not exist');
+  }
+
+
+
+  const checkPassword =await bcrypt.compare(userData.password, isUserExist?.password)
+
+  if(!checkPassword){
+     throw new AppError(httpStatus.FORBIDDEN, 'Password does not match!');
   }
 
   //checking is user blocked/deleted
@@ -40,34 +52,37 @@ const signIn = async (userData: TUserSignIn) => {
     configs.jwt_refresh_expiresIn,
   );
 
-  const { isDeleted, status, ...user } = isUserExist;
+  const user = {...isUserExist._doc}
 
-  return { user, accessToken, refreshToken };
+  const { isDeleted, password, status, ...rest } = user;
+
+  console.log(accessToken);
+  
+  return { rest, accessToken, refreshToken };
 };
 
-
-const refreshToken = async (refreshToken:string)=>{
+const refreshToken = async (refreshToken: string) => {
   const decode = jwt.verify(
     refreshToken,
     configs.jwt_refresh_secret,
   ) as JwtPayload;
 
   //checking is user exist/blocked/deleted
-  const user = await User.isUserHasAccess(decode.id) as TUserResponse;
+  const user = (await User.isUserHasAccess(decode.id)) as TUserResponse;
 
   const payload = {
-    id:user._id,
-    role:user.role
-  }
+    id: user._id,
+    role: user.role,
+  };
 
-  const token = generateToken(payload,configs.jwt_access_secret,configs.jwt_access_expiresIn)
+  const token = generateToken(
+    payload,
+    configs.jwt_access_secret,
+    configs.jwt_access_expiresIn,
+  );
 
-  return token
-
-}
-
-
-
+  return token;
+};
 
 export const authServices = {
   createUserIntoDB,
