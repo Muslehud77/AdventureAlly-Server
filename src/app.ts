@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors'
 import { notFound } from './App/ErrorHandler/notFound';
 import { globalErrorHandler } from './App/ErrorHandler/globalErrorHandler';
+import router from './App/routes';
 const app = express();
 
 
@@ -9,6 +10,8 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
+// application routes
+app.use('/api',router)
 
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello World!');
