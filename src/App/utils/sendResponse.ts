@@ -10,6 +10,16 @@ type TData<T> = {
 }
 
 export const sendResponse = <T>(res: Response, data: TData<T>) => {
+
+  if(!Object.keys(data).length){
+     res.status(404).json({
+       success: false,
+       statusCode: 404,
+       message: 'No Data Found',
+       data: [],
+     });
+  }
+ 
   res.status(data.statusCode).json({
     success: data.success,
     message: data?.message || 'Request Successful',

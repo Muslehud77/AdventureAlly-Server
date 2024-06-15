@@ -1,18 +1,21 @@
-import { Model } from "mongoose";
+import { Model } from 'mongoose';
 
 export interface TUser {
   name: string;
   email: string;
-  role: "admin" | "user";
+  role: 'admin' | 'user';
   password: string;
   phone: string;
   address: string;
   isDeleted?: boolean;
-  status? : "in-progress" | "blocked"
-};
+  status?: 'in-progress' | 'blocked';
+}
 
+export interface TUserResponse extends TUser {
+  _id: string;
+}
 
 export interface TUserStatics extends Model<TUser> {
-  isUserExists(id: string): Promise<boolean>;
-  isUserHasAccess(id: string): Promise<boolean>;
-} 
+  isUserExists(id: string): Promise<TUserResponse>;
+  isUserHasAccess(id: string): Promise<TUserResponse>;
+}

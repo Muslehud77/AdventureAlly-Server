@@ -48,14 +48,24 @@ export const globalErrorHandler: ErrorRequestHandler = (
     // mongoose query error
     handleError(handleMongooseQueryFieldError);
   } else if (err instanceof AppError || err instanceof Error) {
-    statusCode = err instanceof AppError && err.statusCode;
-    message = err?.message;
-    errorSource = [
-      {
-        path: '',
-        message: err?.message,
-      },
-    ];
+
+    if (err.message === 'You have no access to this route'){
+      return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message: message,
+      });
+    }else{
+      statusCode = err instanceof AppError && err.statusCode;
+      message = err?.message;
+      errorSource = [
+        {
+          path: '',
+          message: err?.message,
+        },
+      ];
+    }
+      
   }
 
   return res.status(statusCode).json({
