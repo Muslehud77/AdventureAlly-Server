@@ -12,6 +12,7 @@ export interface TUser {
 };
 
 
-export interface TUserStatics extends Model<TUser>{
-  isUserExists(id:string) : Promise<boolean>
+export interface TUserStatics extends Model<TUser> {
+  isUserExists(id: string): Promise<boolean>;
+  isUserHasAccess(id: string): Promise<boolean>;
 } 
