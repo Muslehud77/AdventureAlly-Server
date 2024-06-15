@@ -8,11 +8,13 @@ import configs from '../../configs';
 const userSchema = new Schema<TUser, TUserStatics>(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true ,unique:true},
     role: { type: String, enum: ['admin', 'user'], required: true },
     password: { type: String, required: true, select: 0 },
     phone: { type: String, required: true },
     address: { type: String, required: true },
+    status: {type: String,enum : ["in-Progress","blocked"],default:"in-progress"},
+    isDeleted: {type: Boolean,default:false},
   },
   {
     timestamps: true,

@@ -10,6 +10,8 @@ export const handleMongooseQueryFieldError = (err: any): TSimplifiedError => {
       message: err?.message,
     },
   ];
+
+  
   return {
     statusCode,
     message,

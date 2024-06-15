@@ -7,6 +7,8 @@ export interface TUser {
   password: string;
   phone: string;
   address: string;
+  isDeleted?: boolean;
+  status? : "in-progress" | "blocked"
 };
 
 
