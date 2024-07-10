@@ -1,14 +1,15 @@
 import httpStatus from "http-status"
 import AppError from "../errors/AppError"
 import catchAsync from "../utils/catchAsync"
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import configs from "../configs";
 import { User } from "../Modules/User/user.model";
 import { TRequiredRoles } from "../Modules/Auth/auth.interface";
 import { TUserResponse } from "../Modules/User/user.interface";
+import { catchJWTError } from "../utils/catchJWTError";
+import { JwtPayload } from "jsonwebtoken";
 
 
-const Auth = (...requiredRoles: TRequiredRoles[]) => {
+export const Auth = (...requiredRoles: TRequiredRoles[]) => {
   return catchAsync(async (req, res, next) => {
     const token = req.headers.authorization;
 
@@ -19,7 +20,7 @@ const Auth = (...requiredRoles: TRequiredRoles[]) => {
       );
     }
 
-    const decode = jwt.verify(token, configs.jwt_access_secret) as JwtPayload;
+    const decode = catchJWTError(token,configs.jwt_access_secret)
 
     //checking is user exist/blocked/deleted
     const isUserHasAccess = (await User.isUserHasAccess(
@@ -32,6 +33,8 @@ const Auth = (...requiredRoles: TRequiredRoles[]) => {
         'You have no access to this route',
       );
     }
+
+    req.user = decode as JwtPayload
 
     next()
   });
