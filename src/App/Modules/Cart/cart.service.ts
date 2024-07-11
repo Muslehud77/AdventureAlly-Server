@@ -24,7 +24,7 @@ const addCartIntoDB = async(userId:string,cartData:TCart)=>{
         const bulkUpdateProductQuantity = cartData.orders.map(({product,quantity})=>({
             updateOne : {
                 filter : {_id: product},
-                update: {$inc: {stock:-quantity}}
+                update: {$inc: {stock:-quantity,sales:+quantity}}
             }
         }))
 
@@ -39,7 +39,7 @@ const addCartIntoDB = async(userId:string,cartData:TCart)=>{
 
         await session.commitTransaction()
         await session.endSession()
-
+        return result
     }catch(err:any){
         await session.abortTransaction()
         await session.endSession()
@@ -59,7 +59,7 @@ const getAllCartsFromDB = async()=>{
 }
 
 const changeStatusOfCartIntoDB = async(cartId:string,status:string)=>{
-    const result = await Cart.findByIdAndUpdate({_id:cartId},{status})
+    const result = await Cart.findByIdAndUpdate({_id:cartId},{status},{new:true})
     return result
 }
 

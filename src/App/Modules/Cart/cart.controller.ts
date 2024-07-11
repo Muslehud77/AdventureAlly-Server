@@ -25,7 +25,7 @@ const addCart = catchAsync(async (req, res) => {
 
 const getMyCart = catchAsync(async (req, res) => {
   const { id } = req.user;
-
+    
   const result = (await cartServices.getMyCartFromDB(id)) as unknown as TCart[];
 
   const data = {

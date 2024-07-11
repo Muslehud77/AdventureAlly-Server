@@ -2,7 +2,7 @@ import { model, Schema } from "mongoose";
 import { TCart, TItems } from "./cart.interface";
 
 const itemSchema = new Schema<TItems>({
-  product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+  product: { type: Schema.Types.ObjectId, required: true, ref: 'product' },
   quantity: { type: Number, required: true },
   totalAmount: { type: Number, required: true },
 }); ;
