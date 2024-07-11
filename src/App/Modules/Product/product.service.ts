@@ -17,11 +17,11 @@ const createAProductIntoDB = async(product:TProduct)=>{
     return result
 }
 const updateAProductIntoDB = async(id:string,product:TProduct)=>{
-    const result = await Product.findByIdAndUpdate({_id:id},product)
+    const result = await Product.findByIdAndUpdate({_id:id},product,{new:true})
     return result
 }
 const deleteAProductFromDB = async(id:string)=>{
-    const result = await Product.findByIdAndUpdate({_id:id},{isDeleted:true})
+    const result = await Product.findByIdAndUpdate({_id:id},{isDeleted:true},{new:true})
     return result
 }
 

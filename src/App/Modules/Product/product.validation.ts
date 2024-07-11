@@ -6,6 +6,7 @@ const imageSchema = z.string().url();
 export const createProductValidationSchema = z.object({
   body: z.object({
     name: z.string().min(1, 'Name is required'),
+    category: z.string().min(1, 'Category is required'),
     price: z.number().min(0, 'Price must be a positive number'),
     stock: z.number().min(0, 'Stock must be a positive number'),
     description: z.string().min(1, 'Description is required'),
