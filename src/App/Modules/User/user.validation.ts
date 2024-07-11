@@ -34,6 +34,7 @@ const { z } = require('zod');
        required_error: 'Address is required',
        invalid_type_error: 'Address must be a string',
      }),
+     image: z.string().optional(),
      status: z
        .enum(['in-progress', 'blocked'], {
          invalid_type_error: "Status must be either 'in-Progress' or 'blocked'",

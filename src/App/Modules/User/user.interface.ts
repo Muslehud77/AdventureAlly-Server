@@ -9,6 +9,7 @@ export interface TUser {
   address: string;
   isDeleted?: boolean;
   status?: 'in-progress' | 'blocked';
+  image: string
 }
 
 export interface TUserResponse extends TUser {

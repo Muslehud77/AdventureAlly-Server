@@ -13,6 +13,7 @@ const userSchema = new Schema<TUser, TUserStatics>(
     password: { type: String, required: true, select: 0 },
     phone: { type: String },
     address: { type: String },
+    image: { type: String },
     status: {type: String,enum : ["in-progress","blocked"],default:"in-progress"},
     isDeleted: {type: Boolean,default:false},
   },

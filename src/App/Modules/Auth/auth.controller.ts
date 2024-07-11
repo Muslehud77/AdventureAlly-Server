@@ -34,7 +34,7 @@ const userSignIn = catchAsync(async (req, res) => {
   const data = {
     success: true,
     statusCode: 200,
-    message: 'User registered successfully',
+    message: 'User logged in successfully!',
     data: rest as TUser,
     token: accessToken,
   };
