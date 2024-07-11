@@ -11,11 +11,16 @@ router.post('/',Auth('admin'),validateRequest(createProductValidationSchema),pro
 router.get('/:id',productControllers.getProductById)
 
 router.get('/',productControllers.getAllProducts)
+router.get('/best-selling',productControllers.getBestSelling)
 
 router.patch('/:id',Auth('admin'),validateRequest(updateProductValidationSchema),productControllers.updateProduct)
 
 router.delete('/:id',Auth('admin'),productControllers.deleteProduct)
 
 router.get('/deleted-products', Auth('admin'),productControllers.getDeletedProducts)
+router.get('/best-selling', productControllers.getBestSelling)
+router.get('/random-products', productControllers.getRandomProducts)
+
+
 
 export const ProductRoutes = router

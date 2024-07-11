@@ -36,7 +36,22 @@ const getDeletedProductsFromDB = async()=>{
     return result
 }
 
+const getBestSellingFromDB = async()=>{
+     const result = await Product.find({ isDeleted: false }) 
+       .sort({ sales: -1 }) 
+       .limit(6); 
 
+     return result;
+}
+
+const getRandomProductsFromDB = async()=>{
+     const result = await Product.aggregate([
+       { $match: { isDeleted: false } }, 
+       { $sample: { size: 3 } }, 
+     ]);
+
+     return result
+}
 
 
 export const ProductServices = {
@@ -46,4 +61,6 @@ export const ProductServices = {
   updateAProductIntoDB,
   deleteAProductFromDB,
   getDeletedProductsFromDB,
+  getBestSellingFromDB,
+  getRandomProductsFromDB,
 };

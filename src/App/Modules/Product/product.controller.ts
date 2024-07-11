@@ -108,6 +108,37 @@ const deleteProduct = catchAsync(async (req, res) => {
  });
 
 
+ const getBestSelling = catchAsync(async (req, res) => {
+
+   const result = (await ProductServices.getBestSellingFromDB()) as unknown as TProduct[];
+
+   const data = {
+     success: true,
+     statusCode: 200,
+     message: 'Best selling products retrieved successfully',
+     data: result,
+   };
+
+   sendResponse<TProduct[]>(res, data);
+ });
+
+ const getRandomProducts = catchAsync(async (req, res) => {
+
+   const result = (await ProductServices.getRandomProductsFromDB()) as unknown as TProduct[];
+
+   const data = {
+     success: true,
+     statusCode: 200,
+     message: 'Random three products retrieved successfully',
+     data: result,
+   };
+
+   sendResponse<TProduct[]>(res, data);
+ });
+
+
+
+
  export const productControllers = {
    getProductById,
    getAllProducts,
@@ -115,4 +146,6 @@ const deleteProduct = catchAsync(async (req, res) => {
    updateProduct,
    deleteProduct,
    getDeletedProducts,
+   getBestSelling,
+   getRandomProducts,
  };
