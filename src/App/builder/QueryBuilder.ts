@@ -28,25 +28,9 @@ class QueryBuilder<T> {
 
   filter() {
     const { searchTerm, sort, limit, page, fields, ...queryObject } =
-      this.query;
+      this?.query;
 
-    const queryKeys = Object.keys(queryObject);
-    const orConditions: any[] = [];
-
-    queryKeys.forEach(key => {
-      const values = Array.isArray(queryObject[key])
-        ? queryObject[key]
-        : [queryObject[key]];
-      values.forEach((value: string) => {
-        orConditions.push({ [key]: { $regex: new RegExp(value, 'i') } });
-      });
-    });
-
-    if (orConditions.length > 0) {
-      this.modelQuery = this.modelQuery.find({
-        $or: orConditions,
-      } as FilterQuery<T>);
-    }
+    this.modelQuery = this.modelQuery.find(queryObject as FilterQuery<T>);
 
     return this;
   }
