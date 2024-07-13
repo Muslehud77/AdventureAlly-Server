@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import bcrypt from "bcrypt"
@@ -12,8 +13,26 @@ const createUserIntoDB = async (userData: TUser) => {
   const result = await User.create(userData);
   const user = await User.findById({ _id: result._id }).select(
     '-isDeleted -status -__v',
+  ) as TUser & {_id:string};
+
+   const payload = {
+     id: user._id,
+     role: user.role,
+   } as JwtPayload;
+
+  const accessToken = generateToken(
+    payload,
+    configs.jwt_access_secret,
+    configs.jwt_access_expiresIn,
   );
-  return user;
+
+   const refreshToken = generateToken(
+     payload,
+     configs.jwt_refresh_secret,
+     configs.jwt_refresh_expiresIn,
+   );
+
+  return { user, accessToken, refreshToken };
 };
 
 const signIn = async (userData: TUserSignIn) => {
@@ -56,7 +75,7 @@ const signIn = async (userData: TUserSignIn) => {
 
   const { isDeleted, password, status, ...rest } = user;
 
-  console.log(accessToken);
+ 
   
   return { rest, accessToken, refreshToken };
 };

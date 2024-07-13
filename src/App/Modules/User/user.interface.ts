@@ -3,13 +3,13 @@ import { Model } from 'mongoose';
 export interface TUser {
   name: string;
   email: string;
-  role: 'admin' | 'user';
+  role?: 'admin' | 'user';
   password: string;
-  phone: string;
-  address: string;
+  phone?: string;
+  address?: string;
   isDeleted?: boolean;
   status?: 'in-progress' | 'blocked';
-  image: string
+  image?: string
 }
 
 export interface TUserResponse extends TUser {

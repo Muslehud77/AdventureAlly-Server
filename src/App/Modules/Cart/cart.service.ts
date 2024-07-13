@@ -54,7 +54,7 @@ const getMyCartFromDB = async(userId:string)=>{
 }
 
 const getAllCartsFromDB = async()=>{
-    const result = await Cart.find().populate('orders.product')
+    const result = await Cart.find().populate('user')
     return result
 }
 

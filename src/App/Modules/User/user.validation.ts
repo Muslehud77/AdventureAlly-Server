@@ -1,4 +1,5 @@
-const { z } = require('zod');
+import { z } from "zod";
+
 
  const createUserValidation = z.object({
    body: z.object({
@@ -14,10 +15,7 @@ const { z } = require('zod');
        .nonempty({
          message: 'Email is required',
        }),
-     role: z.enum(['admin', 'user'], {
-       required_error: 'Role is required',
-       invalid_type_error: "Role must be either 'admin' or 'user'",
-     }),
+     role: z.enum(['admin', 'user']).optional(),
      password: z
        .string({
          required_error: 'Password is required',
@@ -26,20 +24,15 @@ const { z } = require('zod');
        .nonempty({
          message: 'Password is required',
        }),
-     phone: z.string({
-       required_error: 'Phone number is required',
-       invalid_type_error: 'Phone number must be a string',
-     }),
-     address: z.string({
-       required_error: 'Address is required',
-       invalid_type_error: 'Address must be a string',
-     }),
+     phone: z.string().optional(),
+     address: z.string().optional(),
      image: z.string().optional(),
      status: z
        .enum(['in-progress', 'blocked'], {
          invalid_type_error: "Status must be either 'in-Progress' or 'blocked'",
        })
-       .default('in-progress').optional(),
+       .default('in-progress')
+       .optional(),
      isDeleted: z.boolean().default(false).optional(),
    }),
  });

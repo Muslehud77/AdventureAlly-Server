@@ -8,13 +8,25 @@ import { TUser } from './../User/user.interface';
 const createUser = catchAsync(async (req, res) => {
   const userData = req.body;
 
-  const result = await authServices.createUserIntoDB(userData) as unknown as TUserResponse ;
+  const result = (await authServices.createUserIntoDB(userData)) as unknown as {
+    user: TUserResponse;
+    accessToken: string;
+    refreshToken : string
+  }; ;
  
+ res.cookie('refreshToken', result.refreshToken, {
+   secure: configs.node_env === 'production',
+   httpOnly: true,
+   // sameSite:'none',
+   maxAge: 1000 * 60 * 60 * 24 * 365,
+ });
+
   const data = {
-    success: true, 
+    success: true,
     statusCode: 201,
     message: 'User registered successfully',
-    data: result,
+    data: result.user,
+    token: result.accessToken,
   };
   sendResponse<TUserResponse>(res, data);
 });
@@ -25,10 +37,12 @@ const userSignIn = catchAsync(async (req, res) => {
   const { rest , accessToken, refreshToken } =
     await authServices.signIn(userData);
 
-   res.cookie("refreshToken",refreshToken,{
-    secure: configs.node_env === "production",
-    httpOnly: true
-   })
+   res.cookie('refreshToken', refreshToken, {
+     secure: configs.node_env === 'production',
+     httpOnly: true,
+     // sameSite:'none',
+     maxAge: 1000 * 60 * 60 * 24 * 365,
+   });
 
 
   const data = {

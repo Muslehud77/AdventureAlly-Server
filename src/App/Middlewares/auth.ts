@@ -27,7 +27,10 @@ export const Auth = (...requiredRoles: TRequiredRoles[]) => {
       decode.id,
     )) as TUserResponse;
 
-    if (requiredRoles && !requiredRoles.includes(isUserHasAccess.role)) {
+    if (
+      requiredRoles &&
+      !requiredRoles.includes(isUserHasAccess.role as TRequiredRoles)
+    ) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
         'You have no access to this route',

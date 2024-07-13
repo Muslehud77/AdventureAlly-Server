@@ -9,7 +9,7 @@ const userSchema = new Schema<TUser, TUserStatics>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true ,unique:true},
-    role: { type: String, enum: ['admin', 'user'], required: true },
+    role: { type: String, enum: ['admin', 'user'], default:"user" },
     password: { type: String, required: true, select: 0 },
     phone: { type: String },
     address: { type: String },
