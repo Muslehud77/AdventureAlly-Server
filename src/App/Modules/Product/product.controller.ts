@@ -52,7 +52,7 @@ const updateProduct = catchAsync(async (req, res) => {
   const data = {
     success: true,
     statusCode: 200,
-    message: 'Product created successfully',
+    message: 'Product updated successfully!',
     data: result,
   };
 

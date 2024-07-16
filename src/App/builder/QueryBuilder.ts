@@ -27,8 +27,30 @@ class QueryBuilder<T> {
   }
 
   filter() {
-    const { searchTerm, sort, limit, page, fields, ...queryObject } =
-      this?.query;
+    const {
+      searchTerm,
+      sort,
+      limit,
+      page,
+      fields,
+      category,
+      priceRange,
+      ...queryObject
+    } = this.query;
+
+    if (category) {
+      const categories = (category as string).split(',');
+      queryObject.category = { $in: categories };
+    }
+
+    if (priceRange) {
+      const maxPrice = parseInt(priceRange as string, 10);
+      queryObject.price = { $lte: maxPrice };
+    }
+
+    queryObject['isDeleted'] = false;
+
+    
 
     this.modelQuery = this.modelQuery.find(queryObject as FilterQuery<T>);
 

@@ -60,7 +60,9 @@ const refreshToken = catchAsync(async (req, res) => {
 
   const {refreshToken} = req.cookies
 
-   const result = await authServices.refreshToken(refreshToken)
+   const result = (await authServices.refreshToken(refreshToken)) as unknown as {
+     token: string;
+   };
 
 
   const data = {
@@ -69,10 +71,30 @@ const refreshToken = catchAsync(async (req, res) => {
     message: 'Token updated successfully',
     token : result
   };
-  sendResponse(res, data);
+  sendResponse<{token:string}>(res, data);
 });
 
+const makeAdmin = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const password = req.body.password
+  const currentUser = req.user
+  const currentUserId = currentUser.id
 
+  const result = (await authServices.makeAdminFromUser(
+    id,
+    currentUserId,
+    password,
+  )) as TUser;
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'User role updated successfully',
+    data: result,
+  };
+
+  sendResponse<TUser>(res, data);
+});
 
 
 
@@ -82,4 +104,5 @@ export const authController = {
   createUser,
   userSignIn,
   refreshToken,
+  makeAdmin,
 };

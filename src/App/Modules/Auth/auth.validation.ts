@@ -14,6 +14,13 @@ const UserSignInValidation = z.object({
   }),
 });
 
+const makeAdmin = z.object({
+  body:z.object({
+    password : z.string()
+  })
+})
+
 export const authValidation = {
-    UserSignInValidation
-}
+  UserSignInValidation,
+  makeAdmin,
+};

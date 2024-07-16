@@ -14,6 +14,7 @@ export const createCartValidationSchema = z.object({
     user: z.string().optional(),
     orders: z.array(itemValidation).min(1, 'Orders must contain at least one item'),
     status : z.enum(['pending','delivering','delivered']).optional(),
-    address: z.string()
+    address: z.string(),
+    phone: z.string(),
   }),
 });

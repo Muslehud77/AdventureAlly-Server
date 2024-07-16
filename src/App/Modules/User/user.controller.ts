@@ -6,19 +6,42 @@ import { userServices } from "./user.service";
 
 const updateUser = catchAsync(async (req, res) => {
   const userData = req.body;
-  const userId = req.params.id
+  const userId = req.user.id
 
   const result = await userServices.updateUserIntoDB(userId,userData) as TUser;
 
   const data = {
     success: true,
     statusCode: 200,
-    message: 'User upgraded successfully',
+    message: 'User updated successfully',
     data: result,
   };
 
   sendResponse<TUser>(res, data);
 });
+
+const changeStatus = catchAsync(async (req, res) => {
+
+
+  const id = req.params.id
+  const status = req.body
+
+  const result = (await userServices.changeStatusOfUserInDB(
+    id,
+    status,
+  )) as TUser;
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'User status updated successfully',
+    data: result,
+  };
+
+  sendResponse<TUser>(res, data);
+});
+
+
 
 const deleteUser = catchAsync(async (req, res) => {
     const userId = req.params.id;
@@ -34,8 +57,24 @@ const deleteUser = catchAsync(async (req, res) => {
   sendResponse(res, data);
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  
+
+  const result = await userServices.getAllUsersFromDB();
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Users retrieved successfully',
+    data: result,
+  };
+  sendResponse(res, data);
+});
 
 export const userController = {
   updateUser,
-  deleteUser
-}
+  deleteUser,
+  getAllUsers,
+  changeStatus,
+
+};

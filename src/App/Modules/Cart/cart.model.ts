@@ -12,6 +12,7 @@ const cartSchema = new Schema<TCart>(
     user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     orders: { type: [itemSchema], required: true },
     address: {type:String,required:true},
+    phone: {type:String,required:true},
     status: { type: String, enum: ['pending', 'delivering', 'delivered'], default: 'pending' },
   },
   {

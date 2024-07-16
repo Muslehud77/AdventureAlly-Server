@@ -11,5 +11,6 @@ export type TCart = {
   user?: Types.ObjectId;
   orders: TItems[];
   status?: 'pending' | 'delivering' | 'delivered';
-  address : string
+  address : string;
+  phone : string
 };
