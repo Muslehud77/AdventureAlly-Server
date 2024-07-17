@@ -14,6 +14,7 @@ router.patch('/status/:id',Auth("admin"),validateRequest(userValidation.updateUs
 router.patch('/',Auth("user","admin"),validateRequest(userValidation.updateUserValidation),userController.updateUser)
 
 router.delete('/:id',Auth("admin"),userController.deleteUser)
+
 router.get('/',Auth("admin"),userController.getAllUsers)
 
 

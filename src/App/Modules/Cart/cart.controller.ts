@@ -50,6 +50,18 @@ const getAllCarts = catchAsync(async (req, res) => {
 
   sendResponse<TCart[]>(res, data);
 });
+const getDashboardStats = catchAsync(async (req, res) => {
+  const result = (await cartServices.getDashboardStatsFromDB())
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Here is the stats data!',
+    data: result,
+  };
+
+  sendResponse(res, data);
+});
 
 const changeStatus = catchAsync(async (req, res) => {
   const { id, status } = req.params;
@@ -74,4 +86,5 @@ export const cartController = {
   getAllCarts,
   getMyCart,
   addCart,
+  getDashboardStats,
 };

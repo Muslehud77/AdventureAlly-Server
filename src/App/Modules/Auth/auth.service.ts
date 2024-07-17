@@ -123,7 +123,7 @@ const makeAdminFromUser = async (id: string,currentUserId:string,password:string
 
 
    if (!checkPassword) {
-     throw new AppError(httpStatus.FORBIDDEN, 'Password does not match!');
+     throw new AppError(httpStatus.FORBIDDEN, 'Password is incorrect!');
    }
 
 

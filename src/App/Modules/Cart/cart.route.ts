@@ -8,11 +8,15 @@ import { cartController } from './cart.controller';
 const router = express.Router();
 
 router.post('/',Auth('user'),validateRequest(createCartValidationSchema),cartController.addCart)
+router.post('/payment',Auth('user'),validateRequest(createCartValidationSchema),cartController.addCart)
 
 router.get('/my-cart',Auth('user'),cartController.getMyCart)
 
 router.get('/',Auth('admin'),cartController.getAllCarts)
 
 router.patch('/:id/:status',Auth('admin'),cartController.changeStatus)
+
+router.get('/statistics', Auth('admin'), cartController.getDashboardStats);
+
 
 export const CartRoutes = router;
