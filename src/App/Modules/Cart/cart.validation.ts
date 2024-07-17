@@ -17,7 +17,7 @@ export const createCartValidationSchema = z.object({
     address: z.string(),
     phone: z.string(),
     paymentId: z.string().optional(),
-    paymentMethod: z.enum(["on-delivery","stripe"])
+    paymentMethod: z.enum(["on-delivery","stripe"]).optional()
   }),
 });
 

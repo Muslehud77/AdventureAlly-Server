@@ -2,8 +2,10 @@ import { Types } from 'mongoose';
 
 export type TItems = {
   product: Types.ObjectId;
+  name?:string;
   quantity: number;
   totalAmount: number;
+  image?:string;
 }; 
 
 export type TCart = {

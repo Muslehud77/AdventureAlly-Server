@@ -6,6 +6,10 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { Product } from '../Product/product.model';
 import { User } from '../User/user.model';
+import Stripe from 'stripe';
+import configs from '../../configs';
+
+
 
 const addCartIntoDB = async (userId: string, cartData: TCart) => {
   const session = await mongoose.startSession();
@@ -106,9 +110,48 @@ const getDashboardStatsFromDB = async () => {
 };
 
 
-const stripePayment = async(products)=>{
+const stripePayment = async(cart:TCart)=>{
 
-    const 
+const user = await User.findById(cart.user).select("email")
+
+if(!user){
+     throw new AppError(
+       httpStatus.NOT_FOUND,
+       'User not found!',
+     );
+}
+
+const stripeIntent = new Stripe(configs.STRIPE_SECRETKEY, {
+  apiVersion: '2024-06-20', 
+});
+
+    const products = cart.orders.map((product)=>({
+        price_data:{
+            currency:"usd",
+            product_data:{
+                name:product.name as string,
+                images:[product.image as string]
+            },
+            unit_amount: Math.round((product.totalAmount / product.quantity)*100)
+        },
+        quantity: product.quantity,
+       
+    })) 
+
+
+
+    const session = await stripeIntent.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: products,
+      mode: 'payment',
+      success_url: `${configs.CLIENT_URL}/dashboard/my-orders?payment_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${configs.CLIENT_URL}/dashboard/my-cart`,
+      customer_email: user?.email,
+    });
+
+    console.log(session,"helllloooo");
+
+    return session
 
 }
 
@@ -118,4 +161,5 @@ export const cartServices = {
   changeStatusOfCartIntoDB,
   addCartIntoDB,
   getDashboardStatsFromDB,
+  stripePayment,
 };

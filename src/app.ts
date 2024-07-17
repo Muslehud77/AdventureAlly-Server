@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { notFound } from './App/ErrorHandler/notFound';
 import { globalErrorHandler } from './App/ErrorHandler/globalErrorHandler';
 import router from './App/routes';
+import configs from './App/configs';
 const app = express();
 
 
@@ -12,7 +13,7 @@ app.use(cookieParser());
 app.use(express.json())
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: [configs.CLIENT_URL],
     credentials: true,
   }),
 );

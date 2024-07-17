@@ -23,6 +23,23 @@ const addCart = catchAsync(async (req, res) => {
   sendResponse<TCart>(res, data);
 });
 
+const payment = catchAsync(async (req, res) => {
+
+  const cartData = req.body;
+
+  const result = await cartServices.stripePayment(cartData)
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Request processed successfully!',
+
+    data: result,
+  };
+
+  sendResponse(res, data);
+});
+
 const getMyCart = catchAsync(async (req, res) => {
   const { id } = req.user;
     
@@ -87,4 +104,5 @@ export const cartController = {
   getMyCart,
   addCart,
   getDashboardStats,
+  payment,
 };
