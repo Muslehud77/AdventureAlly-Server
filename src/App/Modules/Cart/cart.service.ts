@@ -149,10 +149,15 @@ const stripeIntent = new Stripe(configs.STRIPE_SECRETKEY, {
       customer_email: user?.email,
     });
 
-    console.log(session,"helllloooo");
 
     return session
 
+}
+
+const isPaymentIdExists = async(paymentId:string)=>{
+const result = await Cart.findOne({ paymentId }).select("_id");
+
+return result
 }
 
 export const cartServices = {
@@ -162,4 +167,5 @@ export const cartServices = {
   addCartIntoDB,
   getDashboardStatsFromDB,
   stripePayment,
+  isPaymentIdExists,
 };

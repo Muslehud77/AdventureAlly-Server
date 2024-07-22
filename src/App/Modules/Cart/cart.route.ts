@@ -23,11 +23,12 @@ router.post(
 );
 
 router.get('/my-cart', Auth('user'), cartController.getMyCart);
-
+router.get('/statistics', Auth('admin'), cartController.getDashboardStats);
 router.get('/', Auth('admin'), cartController.getAllCarts);
+router.get('/:paymentId', Auth('user'), cartController.isPaymentIdExists);
 
 router.patch('/:id/:status', Auth('admin'), cartController.changeStatus);
 
-router.get('/statistics', Auth('admin'), cartController.getDashboardStats);
+
 
 export const CartRoutes = router;

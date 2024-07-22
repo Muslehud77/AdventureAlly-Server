@@ -97,6 +97,22 @@ const changeStatus = catchAsync(async (req, res) => {
 
   sendResponse<TCart>(res, data);
 });
+const isPaymentIdExists = catchAsync(async (req, res) => {
+  const { paymentId } = req.params;
+
+  const result = (await cartServices.isPaymentIdExists(
+    paymentId,
+  )) as unknown as TCart;
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Here you go!',
+    data: result,
+  };
+
+  sendResponse<TCart>(res, data);
+});
 
 export const cartController = {
   changeStatus,
@@ -105,4 +121,5 @@ export const cartController = {
   addCart,
   getDashboardStats,
   payment,
+  isPaymentIdExists,
 };
