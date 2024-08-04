@@ -18,7 +18,7 @@ const createUserIntoDB = async (userData: TUser) => {
    const payload = {
      id: user._id,
      role: user.role,
-   } as JwtPayload;
+   } as { id: string; role: "user" | "admin" };
 
   const accessToken = generateToken(
     payload,
@@ -57,7 +57,7 @@ const signIn = async (userData: TUserSignIn) => {
   const payload = {
     id: isUserExist._id,
     role: isUserExist.role,
-  };
+  } as { id: string; role: 'user' | 'admin' }
 
   const accessToken = generateToken(
     payload,
@@ -92,7 +92,7 @@ const refreshToken = async (refreshToken: string) => {
   const payload = {
     id: user._id,
     role: user.role,
-  };
+  } as { id: string; role: 'user' | 'admin' };
 
   const token = generateToken(
     payload,

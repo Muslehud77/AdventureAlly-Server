@@ -60,18 +60,17 @@ const refreshToken = catchAsync(async (req, res) => {
 
   const {refreshToken} = req.cookies
 
-   const result = (await authServices.refreshToken(refreshToken)) as unknown as {
-     token: string;
-   };
+   const result = (await authServices.refreshToken(refreshToken)) 
 
 
   const data = {
     success: true,
     statusCode: 200,
     message: 'Token updated successfully',
+    data:null,
     token : result
   };
-  sendResponse<{token:string}>(res, data);
+  sendResponse(res, data);
 });
 
 const makeAdmin = catchAsync(async (req, res) => {
